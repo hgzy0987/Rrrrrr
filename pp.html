@@ -187,70 +187,14 @@
 <div id="profileContainer"></div>
 
 <style>
-  #profileContainer {
-    font-family: 'Poppins', sans-serif;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 22px;
-    max-width: 340px;
-    margin: 40px auto;
-    box-shadow: 0 0 30px rgba(0, 238, 255, 0.35);
-    color: #fff;
-    text-align: center;
-    transition: 0.3s ease;
-  }
-
-  .profile-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #00f0ff;
-    box-shadow: 0 0 15px #00f0ff;
-    margin-bottom: 15px;
-  }
-
-  .profile-name {
-    font-size: 22px;
-    font-weight: bold;
-    background: linear-gradient(to right, #00f0ff, #ff00c8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 5px #0ff;
-  }
-
-  .profile-email,
-  .profile-uid {
-    font-size: 14px;
-    margin-top: 8px;
-    word-break: break-word;
-    opacity: 0.9;
-  }
-
-  .copy-btn {
-    margin-top: 12px;
-    padding: 6px 18px;
-    font-size: 13px;
-    border: none;
-    background: linear-gradient(to right, #00f0ff, #ff00c8);
-    color: #fff;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
-  }
-
-  .copy-btn:active {
-    transform: scale(0.96);
-  }
+  /* (Previous style code same as before, keep it unchanged) */
 </style>
 
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-  const supabaseUrl = 'https://tujywmzyqyggcumuoevj.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo';
+  const supabaseUrl = 'https://YOUR_PROJECT.supabase.co';
+  const supabaseKey = 'YOUR_PUBLIC_ANON_KEY';
   const supabase = createClient(supabaseUrl, supabaseKey);
   const profileContainer = document.getElementById("profileContainer");
 
@@ -259,33 +203,45 @@
     return `USER${num}`;
   }
 
+  function generateRandomImage(uid) {
+    // Option 1: Pravatar
+    return `https://i.pravatar.cc/150?u=${uid}`;
+
+    // Option 2 (Alternative): Random Unsplash Avatar
+    // return `https://source.unsplash.com/random/100x100/?face,person&sig=${uid}`;
+  }
+
   async function loadProfile() {
-    const { data: { session }, error } = await supabase.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession();
 
     if (session && session.user) {
       const user = session.user;
       const uid = user.id;
       const email = user.email;
-      const photoURL = `https://i.pravatar.cc/150?u=${uid}`;
 
-      // Check if user exists in "users" table
-      let { data: userData, error: fetchError } = await supabase
+      // Check user data from Supabase
+      let { data: userData, error } = await supabase
         .from('users')
-        .select('username')
+        .select('username, photo')
         .eq('id', uid)
         .single();
 
-      let username;
+      let username, photo;
 
       if (!userData) {
         username = generateRandomName();
-        await supabase.from('users').insert([{ id: uid, email, username }]);
+        photo = generateRandomImage(uid);
+
+        await supabase.from('users').insert([
+          { id: uid, email, username, photo }
+        ]);
       } else {
         username = userData.username;
+        photo = userData.photo;
       }
 
       profileContainer.innerHTML = `
-        <img src="${photoURL}" alt="Profile" class="profile-img">
+        <img src="${photo}" alt="Profile" class="profile-img">
         <div class="profile-name">${username}</div>
         <div class="profile-email">${email}</div>
         <div class="profile-uid" id="uidText">${uid}</div>
@@ -298,8 +254,7 @@
 
   loadProfile();
 </script>
-  
-  <!-- Bottom Menu -->
+ <!-- Bottom Menu -->
   <div class="menu">
   <div class="menu-item">
   <a href="dashboard.html">
