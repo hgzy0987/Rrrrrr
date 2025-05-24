@@ -82,47 +82,45 @@
       min-height: 20px;
     }
     .terms-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px; /* চেকবক্স আর টেক্সটের মধ্যে ফাঁকা রাখে */
-  font-size: 14px;
-  color: #ccc;
-  cursor: pointer;
-  user-select: none;
-}
-
-.terms-label input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  margin: 0; /* ব্রাউজার ডিফল্ট মার্জিন কমাবে */
-}
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #ccc;
+      cursor: pointer;
+      user-select: none;
+    }
+    .terms-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      margin: 0;
+    }
   </style>
 
-  <!-- Google Recaptcha API with your Site Key -->
+  <!-- Google Recaptcha API -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  
-  <!-- Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 </head>
 <body>
   <div class="signup-container">
     <h2>MODX SIGN UP</h2>
     <input type="email" id="email" placeholder="Email Address" required />
-    
+
     <div style="position: relative;">
       <input type="password" id="password" placeholder="Password" required />
       <span class="toggle-password" onclick="togglePassword('password', this)">Show</span>
     </div>
-    
+
     <div style="position: relative;">
       <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
       <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">Show</span>
     </div>
-<label class="terms-label">
-  <input type="checkbox" id="termsCheckbox" />
-  <span>I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms & Conditions</a></span>
-</label>
+
+    <label class="terms-label">
+      <input type="checkbox" id="termsCheckbox" />
+      <span>I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms & Conditions</a></span>
+    </label>
 
     <div class="g-recaptcha" data-sitekey="6Lcsh0crAAAAAPa3mE2zoxuiXbtbAm7ipce_UgZt" style="margin-top: 15px;"></div>
 
@@ -134,14 +132,15 @@
     <div class="footer">Official MODX Premium+ Portal</div>
   </div>
 
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Initialize Supabase client with your keys
-    const supabase = supabase.createClient(
-      "https://tujywmzyqyggcumuoevj.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo"
-    );
+    // Initialize Supabase
+    const supabaseUrl = "https://tujywmzyqyggcumuoevj.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo";
 
-    // Toggle show/hide password function
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
     function togglePassword(fieldId, toggleElem) {
       const input = document.getElementById(fieldId);
       if (input.type === "password") {
@@ -164,35 +163,26 @@
       messageDiv.style.color = "#ff6060";
       messageDiv.textContent = "";
 
-      // Validate terms checkbox
       if (!termsChecked) {
         messageDiv.textContent = "You must agree to the Terms & Conditions.";
         return;
       }
 
-      // Validate reCAPTCHA checked
       if (!recaptchaResponse) {
         messageDiv.textContent = "Please verify reCAPTCHA!";
         return;
       }
 
-      // Password match check
       if (password !== confirmPassword) {
         messageDiv.textContent = "Passwords do not match!";
         return;
       }
 
-      // Password length check (optional but recommended)
       if (password.length < 6) {
         messageDiv.textContent = "Password must be at least 6 characters.";
         return;
       }
 
-      // --- Here you need to verify the recaptcha token server-side ---
-      // We'll simulate this by calling a function verifyRecaptcha (which you must implement server-side)
-      // For demo, skipping server-side verification and proceeding to sign up
-      
-      // Signup user with Supabase
       try {
         const { data, error } = await supabase.auth.signUp({
           email,
@@ -208,7 +198,7 @@
         }
 
         messageDiv.style.color = "#00ffb7";
-        messageDiv.textContent = "Signup successful! Check your email to verify.";
+        messageDiv.textContent = "Signup successful! Please check your email to verify your account.";
         grecaptcha.reset();
 
       } catch (err) {
