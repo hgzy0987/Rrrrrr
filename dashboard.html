@@ -301,96 +301,103 @@
   }
   }
   </style>
-  <!-- Premium One-Line Package Bar -->
-  <div class="package-line-box" id="packageBar">
+<!-- Premium One-Line Package Bar -->
+<div class="package-line-box" id="packageBar">
   <img src="https://i.postimg.cc/6qQwvXgg/exclusive.png" alt="icon" class="package-line-icon">
-  <span class="package-line-title">Your Package:</span>
+  <span class="package-line-title">Admin Message:</span>
   <span class="package-line-value" id="packageValue">Loading...</span>
-  </div>
-  
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  
-  <script>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
   // Firebase Config
   const firebaseConfig = {
-  apiKey: "AIzaSyDNA3h0fExL49Bth-G8nnw_PZ_laNn2tUc",
-  authDomain: "hgzy-signal-gpt.firebaseapp.com",
-  projectId: "hgzy-signal-gpt",
-  storageBucket: "hgzy-signal-gpt.firebasestorage.app",
-  messagingSenderId: "898048478460",
-  appId: "1:898048478460:web:78091c7128f9193f27db79",
-  measurementId: "G-LQH91EEL96"
+    apiKey: "AIzaSyDNA3h0fExL49Bth-G8nnw_PZ_laNn2tUc",
+    authDomain: "hgzy-signal-gpt.firebaseapp.com",
+    projectId: "hgzy-signal-gpt",
+    storageBucket: "hgzy-signal-gpt.appspot.com",
+    messagingSenderId: "898048478460",
+    appId: "1:898048478460:web:78091c7128f9193f27db79",
+    measurementId: "G-LQH91EEL96"
   };
-  
-  // Initialize Firebase
+
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
-  
+
+  // Login check and message fetch
   auth.onAuthStateChanged(user => {
-  const box = document.getElementById('packageValue');
-  if (user) {
-  const uid = user.uid;
-  db.collection("users").doc(uid).get().then(doc => {
-  const data = doc.data();
-  box.innerText = data && data.package ? data.package : "FREE";
-  }).catch(() => {
-  box.innerText = "FREE";
+    const box = document.getElementById('packageValue');
+    if (!user) {
+      window.location.href = "login.html";
+    } else {
+      const uid = user.uid;
+      db.collection("messages").doc(uid).get()
+        .then(doc => {
+          const data = doc.data();
+          box.innerText = data && data.message ? data.message : "No Message";
+        })
+        .catch(() => {
+          box.innerText = "No Message";
+        });
+    }
   });
-  } else {
-  box.innerText = "FREE";
-  }
-  });
-  </script>
-  
-  <style>
+</script>
+
+<style>
   .package-line-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  width: fit-content;
-  max-width: 90%;
-  margin: 20px auto;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    width: fit-content;
+    max-width: 90%;
+    margin: 20px auto;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
   }
+
   .package-line-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #fff;
-  padding: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    padding: 3px;
   }
+
   .package-line-title {
-  color: #ffd700;
+    color: #ffd700;
   }
+
   .package-line-value {
-  color: #ffffff;
+    color: #ffffff;
   }
+
   @media (max-width: 480px) {
-  .package-line-box {
-  font-size: 13px;
-  padding: 8px 14px;
-  gap: 6px;
+    .package-line-box {
+      font-size: 13px;
+      padding: 8px 14px;
+      gap: 6px;
+    }
+
+    .package-line-icon {
+      width: 18px;
+      height: 18px;
+    }
   }
-  .package-line-icon {
-  width: 18px;
-  height: 18px;
-  }
-  }
-  </style>
+</style>
   <!-- Exclusive VIP Offer Section -->
   <a href="recharge.html" class="exclusive-vip-offer" target="_self">
   <div class="exclusive-vip-box">
