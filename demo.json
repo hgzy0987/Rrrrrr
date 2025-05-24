@@ -1,8 +1,0 @@
-{
-  "functions": {
-    "send-otp-email": {
-      "runtime": "deno",
-      "entrypoint": "index.ts"
-    }
-  }
-}
