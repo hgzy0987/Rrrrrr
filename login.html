@@ -129,8 +129,13 @@
   </div>
 
   <script>
-    const supabase = supabase.createClient("https://tujywmzyqyggcumuoevj.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo");
+    // Initialize Supabase client
+    const supabase = supabase.createClient(
+      "https://tujywmzyqyggcumuoevj.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo"
+    );
 
+    // Toggle password visibility
     function togglePassword() {
       const passwordInput = document.getElementById('password');
       const toggleText = document.querySelector('.toggle-password');
@@ -143,19 +148,24 @@
       }
     }
 
+    // Show forgot password form
     function showForgot() {
       document.getElementById('login-form').style.display = 'none';
       document.getElementById('forgot-email').style.display = 'block';
       document.getElementById('message').textContent = '';
     }
 
+    // Show login form
     function showLogin() {
       document.getElementById('forgot-email').style.display = 'none';
       document.getElementById('login-form').style.display = 'block';
       document.getElementById('message').textContent = '';
-      grecaptcha.reset();
+      if (typeof grecaptcha !== 'undefined') {
+        grecaptcha.reset();
+      }
     }
 
+    // Login function without email verification check
     async function login() {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
@@ -182,16 +192,12 @@
 
       if (error) {
         messageDiv.textContent = "Login failed: " + error.message;
-        grecaptcha.reset();
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
       } else {
-        if (!data.user.email_confirmed_at) {
-          messageDiv.textContent = "Please verify your email first.";
-          grecaptcha.reset();
-          return;
-        }
+        // No email verification check here!
         messageDiv.style.color = "#00ffb7";
         messageDiv.textContent = "Login successful! Redirecting...";
-        grecaptcha.reset();
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
 
         setTimeout(() => {
           window.location.href = "dashboard.html";
@@ -199,6 +205,7 @@
       }
     }
 
+    // Send password reset email
     async function sendResetEmail() {
       const email = document.getElementById('reset-email').value.trim();
       const messageDiv = document.getElementById('message');
@@ -211,7 +218,7 @@
       }
 
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/reset-password.html' // You can change this URL to your reset page
+        redirectTo: window.location.origin + '/reset-password.html'
       });
 
       if (error) {
@@ -222,6 +229,13 @@
         document.getElementById('reset-email').value = '';
       }
     }
+
+    // Optional: Auto-redirect if user is already logged in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        window.location.href = "dashboard.html";
+      }
+    });
   </script>
 </body>
 </html>
