@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+  <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+<script>
+  // Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDNA3h0fExL49Bth-G8nnw_PZ_laNn2tUc",
+    authDomain: "hgzy-signal-gpt.firebaseapp.com",
+    projectId: "hgzy-signal-gpt",
+    storageBucket: "hgzy-signal-gpt.appspot.com",
+    messagingSenderId: "898048478460",
+    appId: "1:898048478460:web:78091c7128f9193f27db79",
+    measurementId: "G-LQH91EEL96"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // Check if user is logged in
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      // User is not logged in, redirect
+      window.location.href = "login.html";
+    }
+    // If logged in, do nothing (stay on dashboard)
+  });
+</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HGZY SIGNAL</title>
