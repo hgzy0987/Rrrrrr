@@ -3,224 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login | MODX Premium+</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+  <title>Access Verified | MODX Premium+</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: radial-gradient(circle at top, #000000, #0f0f0f, #1a1a1a);
       font-family: 'Rajdhani', sans-serif;
-      height: 100vh;
+      color: #00ffea;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      color: #fff;
-    }
-    .login-container {
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid #00ffee33;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 0 25px #00ffeeb7;
-      border-radius: 20px;
-      padding: 30px 25px;
-      width: 90%;
-      max-width: 400px;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
       text-align: center;
     }
-    .login-container h2 {
-      font-size: 28px;
-      margin-bottom: 15px;
-      color: #00ffea;
-      text-shadow: 0 0 10px #00ffe7;
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ffee;
     }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-      color: #000;
-    }
-    .password-wrapper {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #00ffee;
-      font-weight: bold;
-      user-select: none;
-      font-size: 14px;
-    }
-    .btn {
-      width: 100%;
-      padding: 12px;
+    .access-btn {
+      padding: 12px 30px;
       background-color: #00ffcc;
       color: #000;
+      font-size: 18px;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 15px;
-      transition: background 0.3s;
+      box-shadow: 0 0 15px #00ffee;
+      transition: 0.3s;
     }
-    .btn:hover {
+    .access-btn:hover {
       background-color: #00ddb3;
     }
-    .switch-link {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #ccc;
-    }
-    .switch-link a {
-      color: #00ffee;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    #message {
-      margin-top: 10px;
-      font-size: 14px;
-      min-height: 18px;
-    }
-    #forgot-email {
-      margin-top: 15px;
-      display: none;
-    }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <div class="login-container">
-    <h2>MODX LOGIN</h2>
-
-    <div id="login-form">
-      <input type="email" id="email" placeholder="Email Address" required />
-      <div class="password-wrapper">
-        <input type="password" id="password" placeholder="Password" required />
-        <span class="toggle-password" onclick="togglePassword()">Show</span>
-      </div>
-
-      <div id="message"></div>
-      <button class="btn" onclick="login()">Login</button>
-
-      <div class="switch-link">
-        Don't have an account? <a href="signup.html">Sign Up here</a>
-      </div>
-      <div class="switch-link">
-        <a onclick="showForgot()">Forgot Password?</a>
-      </div>
-    </div>
-
-    <div id="forgot-email">
-      <input type="email" id="reset-email" placeholder="Enter your registered email" />
-      <button class="btn" onclick="sendResetEmail()">Send Reset Link</button>
-      <div class="switch-link">
-        <a onclick="showLogin()">Back to Login</a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const supabase = supabase.createClient(
-      "https://tujywmzyqyggcumuoevj.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo"
-    );
-
-    // পেজ লোড হলে চেক ইউজার লগইন আছে কিনা
-    window.onload = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        window.location.href = "dashboard.html";
-      }
-    };
-
-    function togglePassword() {
-      const passwordInput = document.getElementById("password");
-      const toggleText = document.querySelector(".toggle-password");
-      if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        toggleText.textContent = "Hide";
-      } else {
-        passwordInput.type = "password";
-        toggleText.textContent = "Show";
-      }
-    }
-
-    function showForgot() {
-      document.getElementById("login-form").style.display = "none";
-      document.getElementById("forgot-email").style.display = "block";
-      document.getElementById("message").textContent = "";
-    }
-
-    function showLogin() {
-      document.getElementById("forgot-email").style.display = "none";
-      document.getElementById("login-form").style.display = "block";
-      document.getElementById("message").textContent = "";
-    }
-
-    async function login() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-      const messageDiv = document.getElementById("message");
-
-      messageDiv.style.color = "#ff6060";
-      messageDiv.textContent = "";
-
-      if (!email || !password) {
-        messageDiv.textContent = "Please enter email and password.";
-        return;
-      }
-
-      // লগইন চেষ্টা
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        messageDiv.textContent = "Login failed: " + error.message;
-      } else {
-        // ইমেইল ভেরিফাইড কিনা চেক
-        if (!data.user.email_confirmed_at) {
-          messageDiv.textContent = "Please verify your email first. Check your inbox.";
-          await supabase.auth.signOut(); // লগআউট করে দাও
-          return;
-        }
-
-        messageDiv.style.color = "#00ffb7";
-        messageDiv.textContent = "Login successful! Redirecting...";
-
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 1500);
-      }
-    }
-
-    async function sendResetEmail() {
-      const email = document.getElementById("reset-email").value.trim();
-      const messageDiv = document.getElementById("message");
-      messageDiv.style.color = "#ff6060";
-      messageDiv.textContent = "";
-
-      if (!email) {
-        messageDiv.textContent = "Please enter your registered email.";
-        return;
-      }
-
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + "/reset-password.html",
-      });
-
-      if (error) {
-        messageDiv.textContent = "Failed to send reset email: " + error.message;
-      } else {
-        messageDiv.style.color = "#00ffb7";
-        messageDiv.textContent = "Password reset link sent! Check your email.";
-        document.getElementById("reset-email").value = "";
-      }
-    }
-  </script>
+  <h1>Email Verified Successfully</h1>
+  <p>Welcome to MODX Premium+</p>
+  <button class="access-btn" onclick="location.href='dashboard.html'">Access To GPT</button>
 </body>
 </html>
