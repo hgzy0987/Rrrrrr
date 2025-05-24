@@ -1,163 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Login - HGZY Signal</title>
-
-<!-- Supabase CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- reCAPTCHA v2 script -->
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-<style>
-  body {
-    background: #121212;
-    color: #eee;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  .login-container {
-    background: #222;
-    padding: 2rem;
-    border-radius: 10px;
-    width: 320px;
-    box-shadow: 0 0 10px #00ffb7;
-  }
-  h2 {
-    text-align: center;
-    margin-bottom: 1rem;
-    color: #00ffb7;
-  }
-  input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 0.8rem;
-    margin-bottom: 1rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  button {
-    width: 100%;
-    padding: 0.8rem;
-    background: #00ffb7;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    color: #121212;
-    font-weight: bold;
-  }
-  button:hover {
-    background: #00d39b;
-  }
-  #message {
-    margin-top: 1rem;
-    height: 1.2rem;
-    text-align: center;
-    font-weight: bold;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login | MODX Premium+</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: radial-gradient(circle at top, #000000, #0f0f0f, #1a1a1a);
+      font-family: 'Rajdhani', sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .login-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #00ffee33;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 25px #00ffeeb7;
+      border-radius: 20px;
+      padding: 30px 25px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .login-container h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: #00ffea;
+      text-shadow: 0 0 10px #00ffe7;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      color: #000;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #00ffee;
+      font-weight: bold;
+      user-select: none;
+      font-size: 14px;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #00ddb3;
+    }
+    .switch-link {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ccc;
+    }
+    .switch-link a {
+      color: #00ffee;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    #message {
+      margin-top: 10px;
+      font-size: 14px;
+      min-height: 18px;
+    }
+    #forgot-email {
+      margin-top: 15px;
+      display: none;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
+  <div class="login-container">
+    <h2>MODX LOGIN</h2>
 
-<div class="login-container">
-  <h2>HGZY Signal Login</h2>
+    <div id="login-form">
+      <input type="email" id="email" placeholder="Email Address" required />
+      <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Password" required />
+        <span class="toggle-password" onclick="togglePassword()">Show</span>
+      </div>
 
-  <input type="email" id="email" placeholder="Email" autocomplete="email" required />
-  <input type="password" id="password" placeholder="Password" autocomplete="current-password" required />
+      <div id="message"></div>
+      <button class="btn" onclick="login()">Login</button>
 
-  <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+      <div class="switch-link">
+        Don't have an account? <a href="signup.html">Sign Up here</a>
+      </div>
+      <div class="switch-link">
+        <a onclick="showForgot()">Forgot Password?</a>
+      </div>
+    </div>
 
-  <button onclick="login()">Login</button>
-  <div id="message"></div>
-</div>
+    <div id="forgot-email">
+      <input type="email" id="reset-email" placeholder="Enter your registered email" />
+      <button class="btn" onclick="sendResetEmail()">Send Reset Link</button>
+      <div class="switch-link">
+        <a onclick="showLogin()">Back to Login</a>
+      </div>
+    </div>
+  </div>
 
-<script>
-  // --- Supabase Setup ---
-  const supabaseUrl = "https://tujywmpyqyggcumuoevj.supabase.co";  // আপনার Supabase URL
-  const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo";               // আপনার anon key
+  <script>
+    const supabase = supabase.createClient(
+      "https://tujywmzyqyggcumuoevj.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo"
+    );
 
-  const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+    // পেজ লোড হলে চেক ইউজার লগইন আছে কিনা
+    window.onload = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        window.location.href = "dashboard.html";
+      }
+    };
 
-  // --- Function to get access token from URL hash ---
-  function getAccessTokenFromHash() {
-    const hash = window.location.hash.substr(1); // Remove '#'
-    const params = new URLSearchParams(hash);
-    return params.get("access_token");
-  }
-
-  // --- Set session from access_token (if any) ---
-  async function setSessionFromAccessToken() {
-    const access_token = getAccessTokenFromHash();
-    if (access_token) {
-      try {
-        // Supabase v2 does NOT provide direct method to set session from token,
-        // so we simulate signIn by setting the session manually
-        await supabase.auth.setSession({ access_token });
-        document.getElementById("message").style.color = "#00ffb7";
-        document.getElementById("message").textContent = "Already logged in. Redirecting...";
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 1500);
-      } catch (error) {
-        document.getElementById("message").style.color = "#ff6060";
-        document.getElementById("message").textContent = "Session restore failed, please login manually.";
-        console.error("Session restore error:", error);
+    function togglePassword() {
+      const passwordInput = document.getElementById("password");
+      const toggleText = document.querySelector(".toggle-password");
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleText.textContent = "Hide";
+      } else {
+        passwordInput.type = "password";
+        toggleText.textContent = "Show";
       }
     }
-  }
 
-  setSessionFromAccessToken();
-
-  // --- Login function ---
-  async function login() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const messageDiv = document.getElementById("message");
-    const recaptchaResponse = grecaptcha.getResponse();
-
-    messageDiv.style.color = "#ff6060";
-    messageDiv.textContent = "";
-
-    if (!email || !password) {
-      messageDiv.textContent = "Please enter email and password.";
-      return;
+    function showForgot() {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("forgot-email").style.display = "block";
+      document.getElementById("message").textContent = "";
     }
 
-    if (!recaptchaResponse) {
-      messageDiv.textContent = "Please verify reCAPTCHA!";
-      return;
+    function showLogin() {
+      document.getElementById("forgot-email").style.display = "none";
+      document.getElementById("login-form").style.display = "block";
+      document.getElementById("message").textContent = "";
     }
 
-    try {
+    async function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const messageDiv = document.getElementById("message");
+
+      messageDiv.style.color = "#ff6060";
+      messageDiv.textContent = "";
+
+      if (!email || !password) {
+        messageDiv.textContent = "Please enter email and password.";
+        return;
+      }
+
+      // লগইন চেষ্টা
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
         messageDiv.textContent = "Login failed: " + error.message;
-        grecaptcha.reset();
+      } else {
+        // ইমেইল ভেরিফাইড কিনা চেক
+        if (!data.user.email_confirmed_at) {
+          messageDiv.textContent = "Please verify your email first. Check your inbox.";
+          await supabase.auth.signOut(); // লগআউট করে দাও
+          return;
+        }
+
+        messageDiv.style.color = "#00ffb7";
+        messageDiv.textContent = "Login successful! Redirecting...";
+
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1500);
+      }
+    }
+
+    async function sendResetEmail() {
+      const email = document.getElementById("reset-email").value.trim();
+      const messageDiv = document.getElementById("message");
+      messageDiv.style.color = "#ff6060";
+      messageDiv.textContent = "";
+
+      if (!email) {
+        messageDiv.textContent = "Please enter your registered email.";
         return;
       }
 
-      messageDiv.style.color = "#00ffb7";
-      messageDiv.textContent = "Login successful! Redirecting...";
-      grecaptcha.reset();
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/reset-password.html",
+      });
 
-      // Redirect after short delay
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 1500);
-
-    } catch (err) {
-      messageDiv.textContent = "Unexpected error: " + err.message;
-      grecaptcha.reset();
+      if (error) {
+        messageDiv.textContent = "Failed to send reset email: " + error.message;
+      } else {
+        messageDiv.style.color = "#00ffb7";
+        messageDiv.textContent = "Password reset link sent! Check your email.";
+        document.getElementById("reset-email").value = "";
+      }
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>
