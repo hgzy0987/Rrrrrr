@@ -6,6 +6,7 @@
   <title>Login | MODX Premium+</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Rajdhani:wght@600&display=swap" rel="stylesheet" />
   <style>
+    /* তোমার আগের স্টাইল এখানে থাকবে */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: radial-gradient(circle at top, #000000, #0f0f0f, #1a1a1a);
@@ -129,13 +130,12 @@
   </div>
 
   <script>
-    // Initialize Supabase client
+    // Supabase Client Initialization
     const supabase = supabase.createClient(
       "https://tujywmzyqyggcumuoevj.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo"
     );
 
-    // Toggle password visibility
     function togglePassword() {
       const passwordInput = document.getElementById('password');
       const toggleText = document.querySelector('.toggle-password');
@@ -148,24 +148,19 @@
       }
     }
 
-    // Show forgot password form
     function showForgot() {
       document.getElementById('login-form').style.display = 'none';
       document.getElementById('forgot-email').style.display = 'block';
       document.getElementById('message').textContent = '';
     }
 
-    // Show login form
     function showLogin() {
       document.getElementById('forgot-email').style.display = 'none';
       document.getElementById('login-form').style.display = 'block';
       document.getElementById('message').textContent = '';
-      if (typeof grecaptcha !== 'undefined') {
-        grecaptcha.reset();
-      }
+      grecaptcha.reset();
     }
 
-    // Login function without email verification check
     async function login() {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
@@ -192,20 +187,22 @@
 
       if (error) {
         messageDiv.textContent = "Login failed: " + error.message;
-        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+        grecaptcha.reset();
       } else {
-        // No email verification check here!
         messageDiv.style.color = "#00ffb7";
         messageDiv.textContent = "Login successful! Redirecting...";
-        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+        grecaptcha.reset();
 
+        // লগইন সফল হলে localStorage তে token বা session সংরক্ষণ করে রাখতে পারো (optional)
+        localStorage.setItem('loggedInUser', JSON.stringify(data.user));
+
+        // Redirect to dashboard
         setTimeout(() => {
           window.location.href = "dashboard.html";
         }, 1500);
       }
     }
 
-    // Send password reset email
     async function sendResetEmail() {
       const email = document.getElementById('reset-email').value.trim();
       const messageDiv = document.getElementById('message');
@@ -218,7 +215,7 @@
       }
 
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/reset-password.html'
+        redirectTo: window.location.origin + '/reset-password.html' // Reset পেজের URL
       });
 
       if (error) {
@@ -230,12 +227,16 @@
       }
     }
 
-    // Optional: Auto-redirect if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
+    // Persistent login check on page load
+    window.onload = async () => {
+      const session = supabase.auth.getSession();
+      // session কে handle করো, যদি থাকে সরাসরি dashboard এ রিডাইরেক্ট করো
+      const { data, error } = await supabase.auth.getSession();
+      if (data.session) {
+        // Already logged in
         window.location.href = "dashboard.html";
       }
-    });
+    };
   </script>
 </body>
 </html>
