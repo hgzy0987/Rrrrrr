@@ -183,130 +183,128 @@
   <br>
   <br>
   <br>
-  <!-- Profile Component -->
-  <div id="profileContainer"></div>
-  
-  <style>
+<!-- Profile Component -->
+<div id="profileContainer"></div>
+
+<style>
   #profileContainer {
-  font-family: 'Poppins', sans-serif;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 22px;
-  max-width: 340px;
-  margin: 40px auto;
-  box-shadow: 0 0 30px rgba(0, 238, 255, 0.35);
-  color: #fff;
-  text-align: center;
-  transition: 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 22px;
+    max-width: 340px;
+    margin: 40px auto;
+    box-shadow: 0 0 30px rgba(0, 238, 255, 0.35);
+    color: #fff;
+    text-align: center;
+    transition: 0.3s ease;
   }
-  
+
   .profile-img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #00f0ff;
-  box-shadow: 0 0 15px #00f0ff;
-  margin-bottom: 15px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00f0ff;
+    box-shadow: 0 0 15px #00f0ff;
+    margin-bottom: 15px;
   }
-  
+
   .profile-name {
-  font-size: 22px;
-  font-weight: bold;
-  background: linear-gradient(to right, #00f0ff, #ff00c8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 5px #0ff;
+    font-size: 22px;
+    font-weight: bold;
+    background: linear-gradient(to right, #00f0ff, #ff00c8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 5px #0ff;
   }
-  
+
   .profile-email,
   .profile-uid {
-  font-size: 14px;
-  margin-top: 8px;
-  word-break: break-all;
-  opacity: 0.9;
+    font-size: 14px;
+    margin-top: 8px;
+    word-break: break-word;
+    opacity: 0.9;
   }
-  
+
   .copy-btn {
-  margin-top: 12px;
-  padding: 6px 18px;
-  font-size: 13px;
-  border: none;
-  background: linear-gradient(to right, #00f0ff, #ff00c8);
-  color: #fff;
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+    margin-top: 12px;
+    padding: 6px 18px;
+    font-size: 13px;
+    border: none;
+    background: linear-gradient(to right, #00f0ff, #ff00c8);
+    color: #fff;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
   }
-  
+
   .copy-btn:active {
-  transform: scale(0.96);
+    transform: scale(0.96);
   }
-  </style>
-  
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-  
-  const firebaseConfig = {
-  apiKey: "AIzaSyDNA3h0fExL49Bth-G8nnw_PZ_laNn2tUc",
-  authDomain: "hgzy-signal-gpt.firebaseapp.com",
-  projectId: "hgzy-signal-gpt",
-  storageBucket: "hgzy-signal-gpt.firebasestorage.app",
-  messagingSenderId: "898048478460",
-  appId: "1:898048478460:web:78091c7128f9193f27db79",
-  measurementId: "G-LQH91EEL96"
-  };
-  
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+</style>
+
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+  const supabaseUrl = 'https://tujywmzyqyggcumuoevj.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo';
+  const supabase = createClient(supabaseUrl, supabaseKey);
   const profileContainer = document.getElementById("profileContainer");
-  
+
   function generateRandomName() {
-  const num = Math.floor(100 + Math.random() * 900);
-  return `USER${num}`;
+    const num = Math.floor(100 + Math.random() * 900);
+    return `USER${num}`;
   }
-  
-  onAuthStateChanged(auth, async (user) => {
-  if (user) {
-  const uid = user.uid;
-  const email = user.email;
-  const photoURL = user.photoURL || `https://i.pravatar.cc/150?u=${uid}`;
-  
-  const userRef = doc(db, "users", uid);
-  const docSnap = await getDoc(userRef);
-  
-  let username;
-  if (docSnap.exists()) {
-  username = docSnap.data().username;
-  } else {
-  username = generateRandomName();
-  await setDoc(userRef, { username, email });
+
+  async function loadProfile() {
+    const { data: { session }, error } = await supabase.auth.getSession();
+
+    if (session && session.user) {
+      const user = session.user;
+      const uid = user.id;
+      const email = user.email;
+      const photoURL = `https://i.pravatar.cc/150?u=${uid}`;
+
+      // Check if user exists in "users" table
+      let { data: userData, error: fetchError } = await supabase
+        .from('users')
+        .select('username')
+        .eq('id', uid)
+        .single();
+
+      let username;
+
+      if (!userData) {
+        username = generateRandomName();
+        await supabase.from('users').insert([{ id: uid, email, username }]);
+      } else {
+        username = userData.username;
+      }
+
+      profileContainer.innerHTML = `
+        <img src="${photoURL}" alt="Profile" class="profile-img">
+        <div class="profile-name">${username}</div>
+        <div class="profile-email">${email}</div>
+        <div class="profile-uid" id="uidText">${uid}</div>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('${uid}')">Copy UID</button>
+      `;
+    } else {
+      profileContainer.innerHTML = `<p style="color:white;">User not logged in.</p>`;
+    }
   }
-  
-  profileContainer.innerHTML = `
-  <img src="${photoURL}" alt="Profile" class="profile-img">
-  <div class="profile-name">${username}</div>
-  <div class="profile-email">${email}</div>
-  <div class="profile-uid" id="uidText">${uid}</div>
-  <button class="copy-btn" onclick="navigator.clipboard.writeText('${uid}')">Copy UID</button>
-  `;
-  } else {
-  profileContainer.innerHTML = `<p style="color:white;">User not logged in.</p>`;
-  }
-  });
-  </script>
+
+  loadProfile();
+</script>
   
   <!-- Bottom Menu -->
   <div class="menu">
   <div class="menu-item">
-  <a href="pp.html">
-  <img src="https://i.postimg.cc/gJQ2qxdR/user-1.png" alt="Profile">
-  <span>Profile</span>
+  <a href="dashboard.html">
+  <img src="https://i.postimg.cc/nznKxgPv/home-1.png" alt="Home">
+  <span>Home</span>
   </a>
   </div>
   <div class="menu-item">
