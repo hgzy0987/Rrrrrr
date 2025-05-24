@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HGZY SIGNAL</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    :root {
+      --bg-dark: #0d0d0d;
+      --bg-light: #f4f4f4;
+      --text-dark: #ffffff;
+      --text-light: #111111;
+      --accent: #00ffe7;
+      --glass: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --bg: var(--bg-dark);
+      --text: var(--text-dark);
+    }
+
+    [data-theme="light"] {
+      --bg: var(--bg-light);
+      --text: var(--text-light);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #222;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      height: 38px;
+      border-radius: 12px;
+    }
+
+    .title {
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .verified {
+      height: 20px;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle input {
+      display: none;
+    }
+
+    .slider {
+      width: 50px;
+      height: 24px;
+      background: #555;
+      border-radius: 50px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle input:checked + .slider::before {
+      transform: translateX(26px);
+    }
+
+    .main {
+      position: absolute;
+      top: 70px; /* Header height */
+      bottom: 60px; /* Footer height */
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .main h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .main p {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .menu {
+      display: flex;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 10px 0;
+      border-top: 1px solid #333;
+      z-index: 998;
+    }
+
+    .menu-item {
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .menu-item:active {
+      transform: scale(0.95);
+    }
+
+    .menu-item img {
+      height: 28px;
+      margin-bottom: 4px;
+    }
+
+    .menu-item span {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .menu-item a {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-section">
+      <img src="https://i.postimg.cc/85MKyWDV/file-0000000061c861f9b54da720efc6b638.png" alt="Logo" class="logo">
+      <div class="title">HGZY SIGNAL GPT</div>
+      <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+      <dotlottie-player src="https://lottie.host/df0c9417-5ae0-4ce5-8dbe-394577955ab9/PIUvuDxZED.lottie" background="transparent" speed="1" style="width: 60px; height: 60px" loop autoplay></dotlottie-player>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="themeToggle">
+      <div class="slider"></div>
+    </label>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <!-- Profile Component -->
+  <div id="profileContainer"></div>
+  
+  <style>
+  #profileContainer {
+  font-family: 'Poppins', sans-serif;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 22px;
+  max-width: 340px;
+  margin: 40px auto;
+  box-shadow: 0 0 30px rgba(0, 238, 255, 0.35);
+  color: #fff;
+  text-align: center;
+  transition: 0.3s ease;
+  }
+  
+  .profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #00f0ff;
+  box-shadow: 0 0 15px #00f0ff;
+  margin-bottom: 15px;
+  }
+  
+  .profile-name {
+  font-size: 22px;
+  font-weight: bold;
+  background: linear-gradient(to right, #00f0ff, #ff00c8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 5px #0ff;
+  }
+  
+  .profile-email,
+  .profile-uid {
+  font-size: 14px;
+  margin-top: 8px;
+  word-break: break-all;
+  opacity: 0.9;
+  }
+  
+  .copy-btn {
+  margin-top: 12px;
+  padding: 6px 18px;
+  font-size: 13px;
+  border: none;
+  background: linear-gradient(to right, #00f0ff, #ff00c8);
+  color: #fff;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+  }
+  
+  .copy-btn:active {
+  transform: scale(0.96);
+  }
+  </style>
+  
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  
+  const firebaseConfig = {
+  apiKey: "AIzaSyDNA3h0fExL49Bth-G8nnw_PZ_laNn2tUc",
+  authDomain: "hgzy-signal-gpt.firebaseapp.com",
+  projectId: "hgzy-signal-gpt",
+  storageBucket: "hgzy-signal-gpt.firebasestorage.app",
+  messagingSenderId: "898048478460",
+  appId: "1:898048478460:web:78091c7128f9193f27db79",
+  measurementId: "G-LQH91EEL96"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const profileContainer = document.getElementById("profileContainer");
+  
+  function generateRandomName() {
+  const num = Math.floor(100 + Math.random() * 900);
+  return `USER${num}`;
+  }
+  
+  onAuthStateChanged(auth, async (user) => {
+  if (user) {
+  const uid = user.uid;
+  const email = user.email;
+  const photoURL = user.photoURL || `https://i.pravatar.cc/150?u=${uid}`;
+  
+  const userRef = doc(db, "users", uid);
+  const docSnap = await getDoc(userRef);
+  
+  let username;
+  if (docSnap.exists()) {
+  username = docSnap.data().username;
+  } else {
+  username = generateRandomName();
+  await setDoc(userRef, { username, email });
+  }
+  
+  profileContainer.innerHTML = `
+  <img src="${photoURL}" alt="Profile" class="profile-img">
+  <div class="profile-name">${username}</div>
+  <div class="profile-email">${email}</div>
+  <div class="profile-uid" id="uidText">${uid}</div>
+  <button class="copy-btn" onclick="navigator.clipboard.writeText('${uid}')">Copy UID</button>
+  `;
+  } else {
+  profileContainer.innerHTML = `<p style="color:white;">User not logged in.</p>`;
+  }
+  });
+  </script>
+  
+  <!-- Bottom Menu -->
+  <div class="menu">
+  <div class="menu-item">
+  <a href="pp.html">
+  <img src="https://i.postimg.cc/gJQ2qxdR/user-1.png" alt="Profile">
+  <span>Profile</span>
+  </a>
+  </div>
+  <div class="menu-item">
+  <a href="recharge.html">
+  <img src="https://i.postimg.cc/ZKjLbmL3/save-money.png" alt="Recharge">
+  <span>Recharge</span>
+  </a>
+  </div>
+  <div class="menu-item">
+  <a href="faq.html">
+  <img src="https://i.postimg.cc/tgDbDYdJ/faq-1.png" alt="FAQ">
+  <span>FAQ</span>
+  </a>
+  </div>
+  </div>
+  
+  <!-- Theme Toggle Script -->
+  <script>
+  const toggle = document.getElementById("themeToggle");
+  toggle.addEventListener("change", () => {
+  document.documentElement.setAttribute("data-theme", toggle.checked ? "light" : "dark");
+  });
+  </script>

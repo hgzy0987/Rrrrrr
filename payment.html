@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recharge Payment</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #0e1014; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .container { background: #1a1f28; padding: 30px; border-radius: 15px; max-width: 400px; width: 100%; box-shadow: 0 0 15px #00ffc3; }
+    label { display: block; margin-top: 15px; font-weight: 600; }
+    input, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 8px; border: none; font-size: 16px; }
+    input[readonly] { background: #262b35; color: #bbb; }
+    button { background: #00ffc3; color: #000; cursor: pointer; font-weight: bold; }
+    .message { margin-top: 20px; font-weight: 600; }
+    .payment-instruction { margin-top: 15px; background: #262b35; padding: 10px; border-radius: 10px; font-size: 14px; }
+    .payment-number { font-weight: bold; font-size: 18px; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>প্যাকেজ রিচার্জ পেমেন্ট</h2>
+    <form id="paymentForm">
+      <label>প্যাকেজ নাম</label>
+      <input type="text" id="packageName" readonly />
+
+      <label>দাম (৳)</label>
+      <input type="number" id="packagePrice" readonly />
+
+      <label>পেমেন্ট মাধ্যম সিলেক্ট করুন</label>
+      <select id="paymentMethod" required>
+        <option value="">-- পেমেন্ট মাধ্যম নির্বাচন করুন --</option>
+        <option value="bkash">বিকাশ</option>
+        <option value="nagad">নগদ</option>
+      </select>
+
+      <div id="paymentDetails" class="payment-instruction" style="display:none;">
+        <div>পেমেন্ট নাম্বার: <span id="paymentNumber" class="payment-number"></span></div>
+        <div>টাকা পাঠান: <span id="paymentAmount" class="payment-number"></span> টাকা</div>
+        <div>পেমেন্ট করার পর নিচের ট্রানজেকশন আইডি দিন</div>
+      </div>
+
+      <label>আপনার UID</label>
+      <input type="text" id="userUID" readonly />
+
+      <label>ট্রানজেকশন আইডি দিন</label>
+      <input type="text" id="transactionId" required placeholder="যেমন: TXN123456789" />
+
+      <button type="submit">পেমেন্ট সাবমিট করুন</button>
+    </form>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    // Firebase Config আপনার প্রকল্পের অনুযায়ী বসাবেন
+    const firebaseConfig = {
+  apiKey: "AIzaSyDNA3h0fExL49Bth-G8nnw_PZ_laNn2tUc",
+  authDomain: "hgzy-signal-gpt.firebaseapp.com",
+  projectId: "hgzy-signal-gpt",
+  storageBucket: "hgzy-signal-gpt.firebasestorage.app",
+  messagingSenderId: "898048478460",
+  appId: "1:898048478460:web:78091c7128f9193f27db79",
+  measurementId: "G-LQH91EEL96"
+};
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const packageNameInput = document.getElementById('packageName');
+    const packagePriceInput = document.getElementById('packagePrice');
+    const userUIDInput = document.getElementById('userUID');
+    const transactionIdInput = document.getElementById('transactionId');
+    const paymentMethodSelect = document.getElementById('paymentMethod');
+    const paymentDetailsDiv = document.getElementById('paymentDetails');
+    const paymentNumberSpan = document.getElementById('paymentNumber');
+    const paymentAmountSpan = document.getElementById('paymentAmount');
+    const messageDiv = document.getElementById('message');
+    const paymentForm = document.getElementById('paymentForm');
+
+    // প্যাকেজ নাম ও দাম URL থেকে সেট করা
+    packageNameInput.value = urlParams.get('package') || '';
+    packagePriceInput.value = urlParams.get('price') || '';
+
+    // ইউজার লগইন চেক ও UID পাওয়া
+    auth.onAuthStateChanged(user => {
+      if(user){
+        userUIDInput.value = user.uid;
+      } else {
+        messageDiv.style.color = 'red';
+        messageDiv.innerText = 'পেমেন্ট করার জন্য প্রথমে লগইন করুন।';
+        paymentForm.style.display = 'none';
+      }
+    });
+
+    // পেমেন্ট মাধ্যম সিলেক্ট করলে নাম্বার ও নির্দেশনা দেখানো
+    paymentMethodSelect.addEventListener('change', () => {
+      const method = paymentMethodSelect.value;
+      if(!method){
+        paymentDetailsDiv.style.display = 'none';
+        paymentNumberSpan.innerText = '';
+        paymentAmountSpan.innerText = '';
+        return;
+      }
+      paymentDetailsDiv.style.display = 'block';
+      const price = Number(packagePriceInput.value) || 0;
+
+      if(method === 'bkash'){
+        paymentNumberSpan.innerText = '01318645435'; // বিকাশ নাম্বার এখানে দিন
+        paymentAmountSpan.innerText = price;
+      } else if(method === 'nagad'){
+        paymentNumberSpan.innerText = '01855966005'; // নগদ নাম্বার এখানে দিন
+        paymentAmountSpan.innerText = price;
+      }
+    });
+
+    paymentForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      messageDiv.style.color = '#00ffc3';
+      messageDiv.innerText = 'পেমেন্ট জমা দেওয়া হচ্ছে...';
+
+      try {
+        const uid = userUIDInput.value;
+        const packageName = packageNameInput.value;
+        const price = Number(packagePriceInput.value);
+        const transactionId = transactionIdInput.value.trim();
+        const paymentMethod = paymentMethodSelect.value;
+
+        if(!uid || !packageName || !price || !transactionId || !paymentMethod){
+          messageDiv.style.color = 'red';
+          messageDiv.innerText = 'সকল তথ্য সঠিকভাবে দিন।';
+          return;
+        }
+
+        // Firestore এ পেমেন্ট ডেটা জমা
+        await db.collection('payments').add({
+          uid,
+          packageName,
+          price,
+          transactionId,
+          paymentMethod,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        messageDiv.innerText = 'পেমেন্ট সফলভাবে জমা হয়েছে। ধন্যবাদ!';
+        paymentForm.reset();
+        packageNameInput.value = packageName;  // আবার প্যাকেজ ফিরিয়ে দিন
+        packagePriceInput.value = price;
+        paymentDetailsDiv.style.display = 'none';
+
+      } catch (error) {
+        messageDiv.style.color = 'red';
+        messageDiv.innerText = 'পেমেন্ট জমা দিতে সমস্যা হয়েছে: ' + error.message;
+      }
+    });
+  </script>
+</body>
+</html>

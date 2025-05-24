@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HGZY SIGNAL</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    :root {
+      --bg-dark: #0d0d0d;
+      --bg-light: #f4f4f4;
+      --text-dark: #ffffff;
+      --text-light: #111111;
+      --accent: #00ffe7;
+      --glass: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --bg: var(--bg-dark);
+      --text: var(--text-dark);
+    }
+
+    [data-theme="light"] {
+      --bg: var(--bg-light);
+      --text: var(--text-light);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #222;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      height: 38px;
+      border-radius: 12px;
+    }
+
+    .title {
+      font-size: 19px;
+      font-weight: 600;
+    }
+
+    .verified {
+      height: 20px;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    .toggle input {
+      display: none;
+    }
+
+    .slider {
+      width: 50px;
+      height: 24px;
+      background: #555;
+      border-radius: 50px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle input:checked + .slider::before {
+      transform: translateX(26px);
+    }
+
+    .main {
+      position: absolute;
+      top: 70px; /* Header height */
+      bottom: 60px; /* Footer height */
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .main h2 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .main p {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .menu {
+      display: flex;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 10px 0;
+      border-top: 1px solid #333;
+      z-index: 998;
+    }
+
+    .menu-item {
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .menu-item:active {
+      transform: scale(0.95);
+    }
+
+    .menu-item img {
+      height: 28px;
+      margin-bottom: 4px;
+    }
+
+    .menu-item span {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .menu-item a {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-section">
+      <img src="https://i.postimg.cc/85MKyWDV/file-0000000061c861f9b54da720efc6b638.png" alt="Logo" class="logo">
+      <div class="title">HGZY SIGNAL GPT</div>
+      <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+      <dotlottie-player src="https://lottie.host/df0c9417-5ae0-4ce5-8dbe-394577955ab9/PIUvuDxZED.lottie" background="transparent" speed="1" style="width: 60px; height: 60px" loop autoplay></dotlottie-player>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="themeToggle">
+      <div class="slider"></div>
+    </label>
+  </div>
+
+  <!-- Main Scrollable Content -->
+ 
+    <!-- Example scrollable content -->
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="smart-notice-box">
+    <div class="notice-container">
+    <span class="material-symbols-outlined notice-icon">campaign</span>
+    <span class="notice-label">নোটিশ:</span>
+    <div class="notice-scroll">
+    <div class="notice-text">
+    সতর্ক বার্তা অবশ্যই আমাদের অফিসিয়াল নাম্বার এ লেনদেন করবেন এ ছাড়া অন্য কোন নাম্বার বা ব্যক্তি দ্বারা  লেনদেন করবেন না । না হয় কতৃপক্ষ কোনোভাবেই দায়ী থাকবে না ‼️
+    </div>
+    </div>
+    </div>
+    
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    
+    <style>
+    .smart-notice-box {
+    width: 100%;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    padding: 10px 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    z-index: 9999;
+    }
+    
+    .notice-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 15px;
+    white-space: nowrap;
+    position: relative;
+    }
+    
+    .notice-icon {
+    color: #ffcc00;
+    font-size: 26px;
+    flex-shrink: 0;
+    }
+    
+    .notice-label {
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    flex-shrink: 0;
+    }
+    
+    .notice-scroll {
+    overflow: hidden;
+    flex: 1;
+    position: relative;
+    height: 30px;
+    }
+    
+    .notice-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scroll-left 15s linear infinite;
+    color: #fff;
+    font-size: 16px;
+    line-height: 30px;
+    }
+    
+    @keyframes scroll-left {
+    0% {
+    transform: translateX(0%);
+    }
+    100% {
+    transform: translateX(-100%);
+    }
+    }
+    
+    /* মোবাইল ফ্রেন্ডলি */
+    @media (max-width: 600px) {
+    .notice-label {
+    font-size: 16px;
+    }
+    
+    .notice-text {
+    font-size: 15px;
+    }
+    }
+    </style>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Premium Package (Scoped)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    .mypkg-package-section {
+      padding: 30px 15px;
+      max-width: 1200px;
+      margin: auto;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      background: #0e1014;
+    }
+    .mypkg-package-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .mypkg-package-card {
+      background: linear-gradient(145deg, #1a1e27, #10141c);
+      border: 1px solid #262b35;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 255, 200, 0.08);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    .mypkg-package-card.mypkg-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .mypkg-package-image {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-bottom: 1px solid #262b35;
+    }
+    .mypkg-package-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mypkg-package-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .mypkg-package-title img {
+      width: 20px;
+      height: 20px;
+    }
+    .mypkg-package-price {
+      font-size: 16px;
+      background: #00ffc3;
+      color: #000;
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-weight: bold;
+    }
+    .mypkg-button-group {
+      display: flex;
+      gap: 10px;
+    }
+    .mypkg-btn {
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .mypkg-btn-details {
+      background: #1c1f2a;
+      color: #fff;
+    }
+    .mypkg-btn-buy {
+      background: #00ffc3;
+      color: #000;
+    }
+    .mypkg-popup-box {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1a1f28;
+      color: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0,255,200,0.3);
+      display: none;
+      z-index: 9999;
+      max-width: 300px;
+      text-align: center;
+    }
+    .mypkg-popup-close {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: crimson;
+      border: none;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    @media (max-width: 600px) {
+      .mypkg-package-content {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="mypkg-package-section" id="mypkg-package-section">
+  <div class="mypkg-package-grid" id="mypkg-packageList"></div>
+</div>
+
+<div class="mypkg-popup-box" id="mypkg-popup">
+  <div id="mypkg-popupContent"></div>
+  <button class="mypkg-popup-close" id="mypkg-popupCloseBtn">বন্ধ করুন</button>
+</div>
+
+<script>
+  (function(){
+    const packages = [
+      { name: "FREE", price: 0, details: "ফ্রি প্যাকেজে বেসিক ফিচারস পাবেন! প্রতিদিন ফ্রি ১ টা সিগনাল পাবেন সকাল ১১ টার সময় এবং প্রতি শুক্রবার সকাল ১০ টার সময় ফ্রি ৩ টা সিগনাল পাবেন ! শর্ত প্রযোজ্য ", link: "free.html", image: "https://i.postimg.cc/h4LdBDdn/free-pop-art-cartoon-comic-background-design-template-393879-5081.webp", icon: "https://i.postimg.cc/7hhcksZJ/20250524-092736.png" },
+      { name: "VIP 1", price: 99, details: "শুরুর জন্য উপযুক্ত প্যাকেজ ! এই প্যাকেজ নিলে দৈনিক ( ৭ দিন ) সকাল-বিকাল (সকাল ১০-১১ টা, বিকাল ৪-৫ টা ) ৫ টা করে মোট ১০ টা সিগনাল পাবেন ! এবং প্রতি শুক্রবার সকাল ১০ টার সময় ফ্রি ৪ টা সিগনাল পাবেন ! শর্ত প্রযোজ্য", image: "https://i.postimg.cc/2SxvFH2W/order-confirmed-concept-illustration-114360-1545.jpg", icon: "https://i.postimg.cc/7hhcksZJ/20250524-092736.png" },
+      { name: "VIP 2", price: 199, details: "আরও বেশি সুবিধাসম্পন্ন প্যাকেজ ! এই প্যাকেজ নিলে দৈনিক (৭ দিন )সকাল-বিকাল (সকাল ১০-১১ টা, বিকাল ৪-৫ টা ) ৮ টা করে মোট ১৬ টা সিগনাল পাবেন ! এবং প্রতি শুক্রবার সকাল ১০ টার সময় ফ্রি ৫ টা সিগনাল পাবেন ! শর্ত প্রযোজ্য", image: "https://i.postimg.cc/2SxvFH2W/order-confirmed-concept-illustration-114360-1545.jpg", icon: "https://i.postimg.cc/7hhcksZJ/20250524-092736.png" },
+      { name: "VIP 3", price: 299, details: "পাওয়ারফুল ফিচারস সহ উন্নত প্যাকেজ ! এই প্যাকেজ নিলে দৈনিক ( ৭ দিন ) সকাল-বিকাল (সকাল ১০-১১ টা, বিকাল ৪-৫ টা ) ১০ টা করে মোট ২০ টা সিগনাল পাবেন ! এবং প্রতি শুক্রবার সকাল ১০ টার সময় ফ্রি ৬ টা সিগনাল পাবেন ! শর্ত প্রযোজ্য", image: "https://i.postimg.cc/2SxvFH2W/order-confirmed-concept-illustration-114360-1545.jpg", icon: "https://i.postimg.cc/7hhcksZJ/20250524-092736.png" },
+      { name: "VIP 4", price: 399, details: "প্রফেশনাল ইউজারদের জন্য সাজানো প্যাকেজ ! এই প্যাকেজ নিলে দৈনিক ( ৭ দিন )সকাল-বিকাল (সকাল ১০-১১ টা, বিকাল ৪-৫ টা ) ১৫ টা করে মোট ৩০ টা সিগনাল পাবেন ! এবং প্রতি শুক্রবার সকাল ১০ টার সময় ফ্রি ৭ টা সিগনাল পাবেন ! শর্ত প্রযোজ্য", image: "https://i.postimg.cc/2SxvFH2W/order-confirmed-concept-illustration-114360-1545.jpg", icon: "https://i.postimg.cc/7hhcksZJ/20250524-092736.png" },
+      { name: "VIP 5", price: 499, details: "এডভান্স ফিচার ও সাপোর্ট সহ ! এই প্যাকেজ নিলে দৈনিক ( ৭ দিন ) সকাল-বিকাল (সকাল ১০-১১ টা, বিকাল ৪-৫ টা ) ২০ টা করে মোট ৪০ টা সিগনাল পাবেন ! এবং প্রতি শুক্রবার সকাল ১০ টার সময় ফ্রি ৮ টা সিগনাল পাবেন ! শর্ত প্রযোজ্য", image: "https://i.postimg.cc/2SxvFH2W/order-confirmed-concept-illustration-114360-1545.jpg", icon: "https://i.postimg.cc/7hhcksZJ/20250524-092736.png" },
+      { name: "VIP 6", price: 599, details: "গেমিং ও সার্ভিস উভয়ের জন্য আদর্শ ! এই প্যাকেজ নিলে দৈনিক ( ৭ দিন ) সকাল-বিকাল (সকাল ১০-১২ টা, বিকাল ৪-৬ টা ) ২৫ টা করে মোট ৫০ টা সিগনাল পাবেন ! এবং প্রতি শুক্রবার সকাল ১০ টার সময় ফ্রি ৯ টা সিগনাল পাবেন ! শর্ত প্রযোজ্য", image: "https://i.postimg.cc/2SxvFH2W/order-confirmed-concept-illustration-114360-1545.jpg", icon: "https://i.postimg.cc/7hhcksZJ/20250524-092736.png" },
+      { name: "VIP 7", price: 699, details: "স্মার্ট ফিচারস ও আলাদা সুবিধাসমূহ ! এই প্যাকেজ নিলে দৈনিক ( ৭ দিন )  সকাল-বিকাল (সকাল ১০-১ টা, বিকাল ৪-৭ টা ) ৩০ টা করে মোট ৬০ টা সিগনাল পাবেন ! এবং প্রতি শুক্রবার সকাল ১০ টার সময় ফ্রি ১০ টা সিগনাল পাবেন ! শর্ত প্রযোজ্য", image: "https://i.postimg.cc/2SxvFH2W/order-confirmed-concept-illustration-114360-1545.jpg", icon: "https://i.postimg.cc/7hhcksZJ/20250524-092736.png" }
+      ];
+
+    const list = document.getElementById("mypkg-packageList");
+    const popup = document.getElementById("mypkg-popup");
+    const popupContent = document.getElementById("mypkg-popupContent");
+    const popupCloseBtn = document.getElementById("mypkg-popupCloseBtn");
+
+    packages.forEach(pkg => {
+      const card = document.createElement("div");
+      card.className = "mypkg-package-card";
+      card.innerHTML = `
+        <img src="${pkg.image}" class="mypkg-package-image" alt="${pkg.name}">
+        <div class="mypkg-package-content">
+          <div class="mypkg-package-title">
+            <img src="${pkg.icon}" alt="icon"> ${pkg.name}
+          </div>
+          <div class="mypkg-package-price">৳ ${pkg.price}</div>
+          <div class="mypkg-button-group">
+            <button class="mypkg-btn mypkg-btn-details" type="button">বিস্তারিত</button>
+            <button class="mypkg-btn mypkg-btn-buy" type="button">${pkg.price === 0 ? "ফ্রি" : "Buy Now"}</button>
+          </div>
+        </div>
+      `;
+      list.appendChild(card);
+
+      const btnDetails = card.querySelector(".mypkg-btn-details");
+      const btnBuy = card.querySelector(".mypkg-btn-buy");
+
+      btnDetails.addEventListener("click", () => {
+        popupContent.innerText = pkg.details;
+        popup.style.display = "block";
+      });
+
+      btnBuy.addEventListener("click", () => {
+        if (pkg.price === 0 && pkg.link) {
+          window.location.href = pkg.link;
+        } else {
+          window.location.href = `payment.html?package=${encodeURIComponent(pkg.name)}&price=${pkg.price}`;
+        }
+      });
+    });
+
+    popupCloseBtn.addEventListener("click", () => {
+      popup.style.display = "none";
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('mypkg-visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(".mypkg-package-card").forEach(card => {
+      observer.observe(card);
+    });
+  })();
+</script>
+</body>
+</html>
+<br>
+
+  <!-- Bottom Menu -->
+  <div class="menu">
+    <div class="menu-item">
+      <a href="pp.html">
+        <img src="https://i.postimg.cc/gJQ2qxdR/user-1.png" alt="Profile">
+        <span>Profile</span>
+      </a>
+    </div>
+    <div class="menu-item">
+      <a href="recharge.html">
+        <img src="https://i.postimg.cc/ZKjLbmL3/save-money.png" alt="Recharge">
+        <span>Recharge</span>
+      </a>
+    </div>
+    <div class="menu-item">
+      <a href="faq.html">
+        <img src="https://i.postimg.cc/tgDbDYdJ/faq-1.png" alt="FAQ">
+        <span>FAQ</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Theme Toggle Script -->
+  <script>
+    const toggle = document.getElementById("themeToggle");
+    toggle.addEventListener("change", () => {
+      document.documentElement.setAttribute("data-theme", toggle.checked ? "light" : "dark");
+    });
+  </script>
+</body>
+</html>
