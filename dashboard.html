@@ -301,10 +301,10 @@
   }
   }
   </style>
-<!-- Premium One-Line Package Bar -->
+<!-- Message Box -->
 <div class="package-line-box" id="packageBar">
   <img src="https://i.postimg.cc/6qQwvXgg/exclusive.png" alt="icon" class="package-line-icon">
-  <span class="package-line-title">Admin Message:</span>
+  <span class="package-line-title">current package:</span>
   <span class="package-line-value" id="packageValue">Loading...</span>
 </div>
 
@@ -321,33 +321,37 @@
     projectId: "hgzy-signal-gpt",
     storageBucket: "hgzy-signal-gpt.appspot.com",
     messagingSenderId: "898048478460",
-    appId: "1:898048478460:web:78091c7128f9193f27db79",
-    measurementId: "G-LQH91EEL96"
+    appId: "1:898048478460:web:78091c7128f9193f27db79"
   };
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // Login check and message fetch
+  const box = document.getElementById('packageValue');
+
   auth.onAuthStateChanged(user => {
-    const box = document.getElementById('packageValue');
     if (!user) {
-      window.location.href = "login.html";
+      window.location.href = "login.html"; // Redirect if not logged in
     } else {
       const uid = user.uid;
       db.collection("messages").doc(uid).get()
         .then(doc => {
-          const data = doc.data();
-          box.innerText = data && data.message ? data.message : "No Message";
+          if (doc.exists && doc.data().message) {
+            box.innerText = doc.data().message;
+          } else {
+            box.innerText = "No Message";
+          }
         })
-        .catch(() => {
+        .catch(error => {
+          console.error("Error fetching message:", error);
           box.innerText = "No Message";
         });
     }
   });
 </script>
 
+<!-- Styling -->
 <style>
   .package-line-box {
     display: flex;
