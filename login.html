@@ -127,101 +127,111 @@
       </div>
     </div>
   </div>
+<script>
+  const supabase = supabase.createClient(
+    "https://tujywmzyqyggcumuoevj.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo"
+  );
 
-  <script>
-    const supabase = supabase.createClient("https://tujywmzyqyggcumuoevj.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo");
+  // পেজ লোড হওয়ার সময় ইউজার লগইন আছে কি না চেক করা
+  window.onload = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      // ইউজার থাকলে সরাসরি ড্যাশবোর্ডে নিয়ে যাওয়া
+      window.location.href = "dashboard.html";
+    }
+  };
 
-    function togglePassword() {
-      const passwordInput = document.getElementById('password');
-      const toggleText = document.querySelector('.toggle-password');
-      if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        toggleText.textContent = "Hide";
-      } else {
-        passwordInput.type = "password";
-        toggleText.textContent = "Show";
-      }
+  function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    const toggleText = document.querySelector(".toggle-password");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      toggleText.textContent = "Hide";
+    } else {
+      passwordInput.type = "password";
+      toggleText.textContent = "Show";
+    }
+  }
+
+  function showForgot() {
+    document.getElementById("login-form").style.display = "none";
+    document.getElementById("forgot-email").style.display = "block";
+    document.getElementById("message").textContent = "";
+  }
+
+  function showLogin() {
+    document.getElementById("forgot-email").style.display = "none";
+    document.getElementById("login-form").style.display = "block";
+    document.getElementById("message").textContent = "";
+    grecaptcha.reset();
+  }
+
+  async function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const messageDiv = document.getElementById("message");
+    const recaptchaResponse = grecaptcha.getResponse();
+
+    messageDiv.style.color = "#ff6060"; // error color
+    messageDiv.textContent = "";
+
+    if (!email || !password) {
+      messageDiv.textContent = "Please enter email and password.";
+      return;
     }
 
-    function showForgot() {
-      document.getElementById('login-form').style.display = 'none';
-      document.getElementById('forgot-email').style.display = 'block';
-      document.getElementById('message').textContent = '';
+    if (!recaptchaResponse) {
+      messageDiv.textContent = "Please verify reCAPTCHA!";
+      return;
     }
 
-    function showLogin() {
-      document.getElementById('forgot-email').style.display = 'none';
-      document.getElementById('login-form').style.display = 'block';
-      document.getElementById('message').textContent = '';
+    // লগইন চেষ্টা
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      messageDiv.textContent = "Login failed: " + error.message;
       grecaptcha.reset();
+    } else {
+      // এখানে ইমেইল ভেরিফিকেশন চেক বাদ দিলাম (তুমি চাইলে যোগাতে পারো)
+      messageDiv.style.color = "#00ffb7";
+      messageDiv.textContent = "Login successful! Redirecting...";
+      grecaptcha.reset();
+
+      // ইউজার লগইন থাকলে session নিজে থেকেই মেইনটেইন হয় Supabase দ্বারা
+
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 1500);
+    }
+  }
+
+  async function sendResetEmail() {
+    const email = document.getElementById("reset-email").value.trim();
+    const messageDiv = document.getElementById("message");
+    messageDiv.style.color = "#ff6060";
+    messageDiv.textContent = "";
+
+    if (!email) {
+      messageDiv.textContent = "Please enter your registered email.";
+      return;
     }
 
-    async function login() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const messageDiv = document.getElementById('message');
-      const recaptchaResponse = grecaptcha.getResponse();
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + "/reset-password.html", // তোমার reset page URL
+    });
 
-      messageDiv.style.color = '#ff6060'; // error color
-      messageDiv.textContent = '';
-
-      if (!email || !password) {
-        messageDiv.textContent = "Please enter email and password.";
-        return;
-      }
-
-      if (!recaptchaResponse) {
-        messageDiv.textContent = "Please verify reCAPTCHA!";
-        return;
-      }
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        messageDiv.textContent = "Login failed: " + error.message;
-        grecaptcha.reset();
-      } else {
-        if (!data.user.email_confirmed_at) {
-          messageDiv.textContent = "Please verify your email first.";
-          grecaptcha.reset();
-          return;
-        }
-        messageDiv.style.color = "#00ffb7";
-        messageDiv.textContent = "Login successful! Redirecting...";
-        grecaptcha.reset();
-
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 1500);
-      }
+    if (error) {
+      messageDiv.textContent = "Failed to send reset email: " + error.message;
+    } else {
+      messageDiv.style.color = "#00ffb7";
+      messageDiv.textContent = "Password reset link sent! Check your email.";
+      document.getElementById("reset-email").value = "";
     }
-
-    async function sendResetEmail() {
-      const email = document.getElementById('reset-email').value.trim();
-      const messageDiv = document.getElementById('message');
-      messageDiv.style.color = '#ff6060';
-      messageDiv.textContent = '';
-
-      if (!email) {
-        messageDiv.textContent = "Please enter your registered email.";
-        return;
-      }
-
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/reset-password.html' // You can change this URL to your reset page
-      });
-
-      if (error) {
-        messageDiv.textContent = "Failed to send reset email: " + error.message;
-      } else {
-        messageDiv.style.color = '#00ffb7';
-        messageDiv.textContent = "Password reset link sent! Check your email.";
-        document.getElementById('reset-email').value = '';
-      }
-    }
-  </script>
+  }
+</script>
 </body>
 </html>
