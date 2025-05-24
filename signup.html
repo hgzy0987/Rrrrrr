@@ -76,29 +76,34 @@
       text-decoration: underline;
     }
     #message {
-      margin-top: 20px;
+      margin-top: 10px;
       font-size: 14px;
-      color: #ff6060;
       min-height: 20px;
+    }
+    #message.error {
+      color: #ff6060;
+    }
+    #message.success {
+      color: #00ffb7;
     }
     .terms-label {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
-      font-size: 19px;
+      gap: 8px;
+      font-size: 14px;
       color: #ccc;
       cursor: pointer;
       user-select: none;
     }
     .terms-label input[type="checkbox"] {
-      width: 26px;
+      width: 16px;
       height: 16px;
       cursor: pointer;
       margin: 0;
     }
   </style>
 
-  <!-- Google Recaptcha API with your Site Key -->
+  <!-- Google Recaptcha API -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -106,6 +111,7 @@
 <body>
   <div class="signup-container">
     <h2>MODX SIGN UP</h2>
+
     <input type="email" id="email" placeholder="Email Address" required />
     <div style="position: relative;">
       <input type="password" id="password" placeholder="Password" required />
@@ -121,6 +127,7 @@
       <input type="checkbox" id="termsCheckbox" />
       <span>I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms & Conditions</a></span>
     </label>
+
     <div class="g-recaptcha" data-sitekey="6Lcsh0crAAAAAPa3mE2zoxuiXbtbAm7ipce_UgZt" style="margin-top: 15px;"></div>
 
     <div id="message"></div>
@@ -132,13 +139,13 @@
   </div>
 
   <script>
-    // Initialize Supabase client
-    const supabase = supabase.createClient(
+    // Supabase client ইনিশিয়ালাইজেশন
+    const supabaseClient = supabase.createClient(
       "https://tujywmzyqyggcumuoevj.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo"
     );
 
-    // Toggle show/hide password
+    // Show / Hide password টগল ফাংশন
     function togglePassword(fieldId, toggleElem) {
       const input = document.getElementById(fieldId);
       if (input.type === "password") {
@@ -158,54 +165,66 @@
       const recaptchaResponse = grecaptcha.getResponse();
       const termsChecked = document.getElementById("termsCheckbox").checked;
 
-      messageDiv.style.color = "#ff6060";
+      messageDiv.className = "";
       messageDiv.textContent = "";
 
+      // Validate terms checkbox
       if (!termsChecked) {
+        messageDiv.className = "error";
         messageDiv.textContent = "You must agree to the Terms & Conditions.";
         return;
       }
 
+      // Validate reCAPTCHA checked
       if (!recaptchaResponse) {
+        messageDiv.className = "error";
         messageDiv.textContent = "Please verify reCAPTCHA!";
         return;
       }
 
+      // Password match check
       if (password !== confirmPassword) {
+        messageDiv.className = "error";
         messageDiv.textContent = "Passwords do not match!";
         return;
       }
 
+      // Password length check
       if (password.length < 6) {
+        messageDiv.className = "error";
         messageDiv.textContent = "Password must be at least 6 characters.";
         return;
       }
 
+      // Signup with Supabase (email verification will NOT be required)
       try {
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await supabaseClient.auth.signUp({
           email,
           password,
           options: {
-            emailRedirectTo: ""  // এখানে খালি রাখলে ইমেইল ভেরিফিকেশন মেইল যাবে না
+            // এটা ফাঁকা রাখলে ভেরিফিকেশন লিংক পাঠাবে না
+            emailRedirectTo: ""
           }
         });
 
         if (error) {
+          messageDiv.className = "error";
           messageDiv.textContent = "Signup failed: " + error.message;
           grecaptcha.reset();
           return;
         }
 
-        // সফল হলে রিডাইরেক্ট করবে login.html-এ
-        messageDiv.style.color = "#00ffb7";
-        messageDiv.textContent = "Signup successful! Redirecting to login...";
+        // সফল হলে মেসেজ দেখাবে এবং ২ সেকেন্ড পর login.html এ নিয়ে যাবে
+        messageDiv.className = "success";
+        messageDiv.textContent = "Signup successful! Redirecting to login page...";
         grecaptcha.reset();
 
         setTimeout(() => {
           window.location.href = "login.html";
-        }, 1500);
+        }, 2000);
 
       } catch (err) {
+        messageDiv.className = "error";
         messageDiv.textContent = "Error: " + err.message;
         grecaptcha.reset();
       }
