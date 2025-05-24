@@ -1,4 +1,0 @@
-.env
-supabase/.env
-node_modules/
-dist/
