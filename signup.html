@@ -76,7 +76,7 @@
       text-decoration: underline;
     }
     #message {
-      margin-top: 10px;
+      margin-top: 20px;
       font-size: 14px;
       color: #ff6060;
       min-height: 20px;
@@ -84,21 +84,21 @@
     .terms-label {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      font-size: 14px;
+      gap: 3px;
+      font-size: 19px;
       color: #ccc;
       cursor: pointer;
       user-select: none;
     }
     .terms-label input[type="checkbox"] {
-      width: 16px;
+      width: 26px;
       height: 16px;
       cursor: pointer;
       margin: 0;
     }
   </style>
 
-  <!-- Google Recaptcha API -->
+  <!-- Google Recaptcha API with your Site Key -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -107,12 +107,11 @@
   <div class="signup-container">
     <h2>MODX SIGN UP</h2>
     <input type="email" id="email" placeholder="Email Address" required />
-    
     <div style="position: relative;">
       <input type="password" id="password" placeholder="Password" required />
       <span class="toggle-password" onclick="togglePassword('password', this)">Show</span>
     </div>
-    
+
     <div style="position: relative;">
       <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
       <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">Show</span>
@@ -122,7 +121,6 @@
       <input type="checkbox" id="termsCheckbox" />
       <span>I agree to the <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms & Conditions</a></span>
     </label>
-
     <div class="g-recaptcha" data-sitekey="6Lcsh0crAAAAAPa3mE2zoxuiXbtbAm7ipce_UgZt" style="margin-top: 15px;"></div>
 
     <div id="message"></div>
@@ -130,16 +128,17 @@
     <button class="btn" onclick="signup()">Sign Up</button>
 
     <div class="switch-link">Already have an account? <a href="login.html">Login here</a></div>
-    <div class="switch-link">Forgot password? <a href="reset.html">Reset here</a></div>
     <div class="footer">Official MODX Premium+ Portal</div>
   </div>
 
   <script>
-    const supabase = window.supabase.createClient(
+    // Initialize Supabase client
+    const supabase = supabase.createClient(
       "https://tujywmzyqyggcumuoevj.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1anl3bXp5cXlnZ2N1bXVvZXZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwNzc0MDcsImV4cCI6MjA2MzY1MzQwN30.Z13iJLkIiw9FGdA3a3xopTEUIXuqWelbdBjWcuAOgQo"
     );
 
+    // Toggle show/hide password
     function togglePassword(fieldId, toggleElem) {
       const input = document.getElementById(fieldId);
       if (input.type === "password") {
@@ -187,21 +186,28 @@
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin + "/login.html"
+            emailRedirectTo: ""  // এখানে খালি রাখলে ইমেইল ভেরিফিকেশন মেইল যাবে না
           }
         });
 
         if (error) {
           messageDiv.textContent = "Signup failed: " + error.message;
+          grecaptcha.reset();
           return;
         }
 
+        // সফল হলে রিডাইরেক্ট করবে login.html-এ
         messageDiv.style.color = "#00ffb7";
-        messageDiv.textContent = "Signup successful! Check your email to verify.";
+        messageDiv.textContent = "Signup successful! Redirecting to login...";
         grecaptcha.reset();
+
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
 
       } catch (err) {
         messageDiv.textContent = "Error: " + err.message;
+        grecaptcha.reset();
       }
     }
   </script>
